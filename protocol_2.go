@@ -295,7 +295,25 @@ Stack before: [any, any]
 Stack after: [any]
 **/
 func (pm *PickleMachine) opcode_NEWOBJ() error {
-	return ErrOpcodeNotImplemented
+	//return ErrOpcodeNotImplemented
+	args, err := pm.pop()
+	if err != nil {
+		return err
+	}
+	cls, err := pm.pop()
+	if err != nil {
+		return err
+	}
+	_ = args
+
+	// TODO Copy args into Args []interface{}
+	// cls will be the 'sentinel' from GLOBAL so for now just push that back
+	gs := cls.(globalSentinel)
+	argsMap := make(map[interface{}]interface{})
+	//obj := instanceSentinel{Package:gs.Package, Name:gs.Name, Map:argsMap}
+	obj := instanceSentinel{Package:gs.Package, Name:gs.Name, Args:[]interface{}{argsMap}}
+	pm.push(obj)
+	return nil
 }
 
 /**
