@@ -9,5 +9,6 @@ type instanceSentinel struct{
 	Package string 
 	Name string
 	Args []interface{}
+	Map map[interface {}]interface {}
 }
 

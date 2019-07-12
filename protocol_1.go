@@ -296,9 +296,15 @@ func (pm *PickleMachine) opcode_SETITEMS() (err error) {
 		return err
 	}
 
+	// TODO change to a type switch
 	v, ok := vI.(map[interface{}]interface{})
 	if !ok {
-		return fmt.Errorf("Opcode SETITEMS expected type %T on stack but found %v(%T)", v, vI, vI)
+		obj, ok := vI.(instanceSentinel)
+		if !ok {
+			return fmt.Errorf("Opcode SETITEMS expected type %T on stack but found %v(%T)", v, vI, vI)
+		}
+		//v = obj.Map
+		v = obj.Args[0].(map[interface{}]interface{})
 	}
 
 	if ((len(pm.Stack) - markIndex + 1) % 2) != 0 {
